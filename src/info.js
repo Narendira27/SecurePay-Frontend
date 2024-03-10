@@ -1,2 +1,2 @@
 
-export default "http://127.0.0.1:54258/"
+export default "https://securepay-backend.onrender.com/"
