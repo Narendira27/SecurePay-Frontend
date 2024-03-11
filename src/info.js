@@ -1,2 +1,2 @@
 
-export default "https://argue-usa-lets-reserved.trycloudflare.com/"
+export default "https://securepay-backend.onrender.com/"
