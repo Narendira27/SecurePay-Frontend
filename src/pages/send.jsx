@@ -14,9 +14,9 @@ import Loader from '../components/loader'
 
 
 const Send = () => {
-
     const [amount, setAmount] = useState(0)
     const [paymentStatus, setPaymentStatus] = useState("initial")
+    const [loadingStaus, setLoadingStatus] = useState(false)
 
     const [params] = useSearchParams()
     const id = params.get("id")
@@ -33,14 +33,17 @@ const Send = () => {
                     <>
                         <HeadingElement text={"Send Money"} />
                         <SendForm onchange={(e) => setAmount(e.target.value)} onclick={async () => {
+                            setLoadingStatus(true)
                             const authToken = Cookies.get('token')
                             const Auth = `Bearer ${authToken}`
                             try {
                                 await axios.post(API_URL + "api/v1/account/transfer", { to: id, amount: parseInt(amount) }, { headers: { Authorization: Auth } })
                                 setPaymentStatus('success')
+                                setLoadingStatus(false)
                             }
                             catch {
                                 setPaymentStatus('failure')
+                                setLoadingStatus(false)
                             }
 
                         }} name={name} />
@@ -65,17 +68,15 @@ const Send = () => {
 
                 )
             default:
-                return (
-                    <Loader />
-                )
+                return null
         }
     }
 
     return (
         <div className="min-h-screen min-w-screen bg-slate-100 flex flex-col justify-center align items-center">
-            <div className="bg-white border border-solid border-neutral-300 p-4  rounded-lg ">
+            {!loadingStaus ? (<div className="bg-white border border-solid border-neutral-300 p-4  rounded-lg h-120 w-100">
                 {renderPaymentCard()}
-            </div>
+            </div>) : <Loader />}
         </div>
     )
 }
